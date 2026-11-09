@@ -1,0 +1,6 @@
+{
+  "name": "तपाईंको TV",
+  "description": "तपाईंको TV — Your Television, Everywhere. A modern, minimalist IPTV and Live TV platform featuring Nepali, sports, news, and entertainment channels with dynamic featured priority events and zero-friction public viewing.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,0 +1,127 @@
+{
+  "entities": {
+    "Channel": {
+      "title": "Channel",
+      "description": "Live television broadcast channel metadata and stream endpoint",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "maxLength": 100 },
+        "nepaliName": { "type": "string", "maxLength": 100 },
+        "logoUrl": { "type": "string", "maxLength": 1000 },
+        "streamUrl": { "type": "string", "maxLength": 1000 },
+        "streamType": { "type": "string", "enum": ["hls", "dash", "direct"] },
+        "categoryId": { "type": "string", "maxLength": 50 },
+        "categoryName": { "type": "string", "maxLength": 50 },
+        "country": { "type": "string", "maxLength": 50 },
+        "language": { "type": "string", "maxLength": 50 },
+        "description": { "type": "string", "maxLength": 1000 },
+        "isActive": { "type": "boolean" },
+        "isPublished": { "type": "boolean" },
+        "isFeatured": { "type": "boolean" },
+        "priority": { "type": "number" },
+        "sourceType": { "type": "string", "enum": ["manual", "iptv-org"] },
+        "verificationStatus": { "type": "string", "enum": ["verified", "untested", "failing"] },
+        "lastVerifiedAt": { "type": "string" },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["name", "streamUrl", "categoryId", "isActive", "isPublished", "priority"]
+    },
+    "FeaturedEvent": {
+      "title": "FeaturedEvent",
+      "description": "Dynamic homepage featured broadcast event or live sports match",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string", "maxLength": 150 },
+        "nepaliTitle": { "type": "string", "maxLength": 150 },
+        "subtitle": { "type": "string", "maxLength": 200 },
+        "description": { "type": "string", "maxLength": 1000 },
+        "thumbnailUrl": { "type": "string", "maxLength": 1000 },
+        "bannerUrl": { "type": "string", "maxLength": 1000 },
+        "channelId": { "type": "string", "maxLength": 64 },
+        "channelName": { "type": "string", "maxLength": 100 },
+        "streamUrlOverride": { "type": "string", "maxLength": 1000 },
+        "status": { "type": "string", "enum": ["UPCOMING", "LIVE", "ENDED", "CANCELLED"] },
+        "startTime": { "type": "string" },
+        "endTime": { "type": "string" },
+        "priority": { "type": "number" },
+        "isActive": { "type": "boolean" },
+        "isPublished": { "type": "boolean" },
+        "buttonLabel": { "type": "string", "maxLength": 50 },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["title", "channelId", "status", "priority", "isActive", "isPublished"]
+    },
+    "Category": {
+      "title": "Category",
+      "description": "Genre classification for channels",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "maxLength": 50 },
+        "nepaliName": { "type": "string", "maxLength": 50 },
+        "slug": { "type": "string", "maxLength": 50 },
+        "icon": { "type": "string", "maxLength": 50 },
+        "isActive": { "type": "boolean" },
+        "displayOrder": { "type": "number" }
+      },
+      "required": ["name", "slug", "isActive", "displayOrder"]
+    },
+    "Announcement": {
+      "title": "Announcement",
+      "description": "Public notice banner displayed on top of website",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string", "maxLength": 100 },
+        "message": { "type": "string", "maxLength": 500 },
+        "nepaliMessage": { "type": "string", "maxLength": 500 },
+        "isActive": { "type": "boolean" },
+        "isPublished": { "type": "boolean" },
+        "startTime": { "type": "string" },
+        "endTime": { "type": "string" },
+        "displayOrder": { "type": "number" },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["title", "message", "isActive", "isPublished", "displayOrder"]
+    },
+    "PublicSettings": {
+      "title": "PublicSettings",
+      "description": "Global website configuration and maintenance mode",
+      "type": "object",
+      "properties": {
+        "appName": { "type": "string", "maxLength": 100 },
+        "tagline": { "type": "string", "maxLength": 100 },
+        "nepaliTagline": { "type": "string", "maxLength": 100 },
+        "logoUrl": { "type": "string", "maxLength": 1000 },
+        "maintenanceMode": { "type": "boolean" },
+        "showFeaturedEvent": { "type": "boolean" },
+        "defaultTheme": { "type": "string", "enum": ["dark", "light"] },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["appName", "maintenanceMode", "showFeaturedEvent"]
+    }
+  },
+  "firestore": {
+    "/channels/{channelId}": {
+      "schema": { "$ref": "#/entities/Channel" },
+      "description": "Published and managed television channels"
+    },
+    "/events/{eventId}": {
+      "schema": { "$ref": "#/entities/FeaturedEvent" },
+      "description": "Featured events and match broadcasts with priority ordering"
+    },
+    "/categories/{categoryId}": {
+      "schema": { "$ref": "#/entities/Category" },
+      "description": "Channel categories and navigation taxonomies"
+    },
+    "/announcements/{announcementId}": {
+      "schema": { "$ref": "#/entities/Announcement" },
+      "description": "Broadcast alerts and maintenance notifications"
+    },
+    "/settings/public": {
+      "schema": { "$ref": "#/entities/PublicSettings" },
+      "description": "Global application branding and maintenance state"
+    }
+  }
+}

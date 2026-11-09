@@ -1,0 +1,803 @@
+तपाईंको TV — COMPLETE IPTV / LIVE TV WEB APPLICATION DEVELOPMENT PROMPT
+
+PROJECT OVERVIEW
+
+Act as a senior full-stack engineer, streaming-platform architect,
+security engineer, and product-focused UI/UX designer.
+
+Build a complete, production-ready, responsive IPTV and Live TV web
+application named:
+
+    तपाईंको TV
+    Your Television, Everywhere.
+
+The application should provide a simple way for anyone to discover and
+watch publicly available, properly licensed live television streams. It
+should support Nepali channels, sports, news, entertainment, movies,
+music, regional channels, and international channels where available.
+
+The most important product rule is:
+
+    VIEWERS NEVER NEED TO LOG IN.
+    ONLY AUTHORIZED ADMINISTRATORS NEED TO LOG IN.
+
+Do not build a generic AI-generated dashboard. Do not use excessive
+gradients, random decorative icons, huge rounded cards everywhere,
+unnecessary glassmorphism, glowing neon effects, fake statistics,
+placeholder content presented as real, or animations that make the
+interface feel artificial. The product must feel like a carefully
+designed, premium, minimalist streaming service.
+
+Build the actual working application, not merely a visual mockup. Do not
+claim a feature is functional until it is implemented and connected to
+its data source.
+
+===================================================================== 1.
+PRODUCT PRINCIPLES AND USER ACCESS
+=====================================================================
+
+1.1 Public viewer access — absolutely no login - Anyone can open the
+website and start browsing immediately. - Do not create viewer
+registration, sign-up, login, OTP, phone verification, email
+verification, membership, or subscription screens. - Do not require an
+account to watch a channel. - Homepage, channel listings, categories,
+search, event pages, and the player must be publicly accessible. -
+Public viewers can browse and watch available streams without
+authentication. - Store favorites, recently watched channels, and simple
+viewing preferences locally in the browser using localStorage. - If
+local storage is unavailable, the application should still work without
+those optional features. - Do not block the player behind a login
+wall. - Do not show a login prompt to ordinary viewers.
+
+1.2 Administrator access — login required - Create a separate admin area
+at /admin. - Create the admin login page at /admin/login. - Only
+authorized administrators can access admin routes and perform write
+operations. - Do not provide public admin registration. - Admin accounts
+must be provisioned through a trusted, secure process. - After
+successful login, redirect the administrator to /admin/dashboard. -
+Include a logout option. - If an administrator is not authenticated,
+redirect them to /admin/login. - Verify authorization on the backend and
+through Firebase Security Rules. Hiding admin buttons in the frontend is
+not security.
+
+1.3 Two access types only
+
+PUBLIC VIEWER: - No login or registration. - Browse channels and
+categories. - Search channels and events. - Watch available streams. -
+View featured events and announcements. - Save favorites locally. - View
+recently watched channels locally. - Share channel and event links.
+
+ADMINISTRATOR: - Secure login required. - Manage channels and stream
+URLs. - Manage featured events and priority. - Upload banners and
+channel logos. - Manage categories and homepage content. - Publish
+announcements. - Configure application settings. - Review channel status
+and content.
+
+===================================================================== 2.
+DESIGN SYSTEM AND VISUAL IDENTITY
+=====================================================================
+
+Create a premium, minimalist, modern streaming interface.
+
+Brand: - Name: तपाईंको TV - English tagline: Your Television,
+Everywhere. - Use a simple, recognizable TV-inspired logo. Do not create
+an overly complicated mascot or abstract AI-looking symbol. - Support
+Nepali and English text properly.
+
+Visual direction: - Default theme: dark. - Background: near-black or
+deep charcoal, such as #101114. - Surface colors: subtle dark grey, such
+as #191B20 and #22252B. - Text: clear white and soft grey. - Accent:
+restrained red or warm coral for LIVE indicators and primary actions. -
+Use green only when it has a meaningful status purpose, such as an
+available/online indicator. - Use a clean font pairing with Noto Sans
+Devanagari for Nepali and a modern sans-serif for English. - Use
+consistent spacing, alignment, typography, and component sizes. - Use
+subtle borders and restrained shadows. - Avoid excessive gradients,
+neon, glassmorphism, visual clutter, oversized typography, and
+unnecessary motion. - Use real channel logos, event artwork, and
+thumbnails when available and permitted. - Never invent a broadcaster
+logo or use a random image as if it were an official channel logo.
+
+Responsive behaviour: - Design mobile-first. - Support Android phones,
+tablets, laptops, desktops, and modern browsers. - On mobile, use a
+compact header and a convenient bottom navigation if appropriate. - On
+desktop, use a clean horizontal navigation. - Keep the player usable in
+portrait and landscape layouts. - Prevent horizontal overflow. - Make
+touch targets comfortable on mobile.
+
+Accessibility: - Use semantic HTML. - Provide accessible labels for
+icon-only buttons. - Ensure readable contrast. - Support keyboard
+navigation for important controls. - Do not communicate status using
+color alone.
+
+===================================================================== 3.
+PUBLIC HOMEPAGE / DASHBOARD
+=====================================================================
+
+The homepage must immediately communicate what is live and make it easy
+to start watching.
+
+3.1 Header / navigation Include: - तपाईंको TV logo and name. - Home. -
+Live TV. - Sports. - News. - Entertainment. - Search. - Theme toggle, if
+implemented. - No viewer login, account, or registration button.
+
+Keep navigation simple. Hide less important links inside a compact
+mobile menu.
+
+3.2 Featured priority event — most important homepage feature Create a
+prominent featured event section near the top of the homepage.
+
+This section is controlled entirely by the administrator through
+Firebase or the selected backend. The administrator must be able to
+change the event without modifying frontend source code or rebuilding
+the website.
+
+Each featured event should support: - Unique event ID. - Event title. -
+Subtitle. - Short description. - Banner image or thumbnail. - Optional
+event logo or tournament name. - Associated channel. - Optional
+event-specific stream URL override. - Event date. - Start time. - End
+time, if applicable. - Time zone configuration; use Nepal Time
+(Asia/Kathmandu) for Nepal-focused schedules unless an event specifies
+otherwise. - Status: UPCOMING, LIVE, ENDED, or CANCELLED. - Priority
+number. - Active/inactive state. - Published/draft state. - Custom
+button label, such as Watch Live, Watch Now, or View Details. - Optional
+destination URL or internal event page.
+
+Display rules: - Show the highest-priority eligible published event
+first. - A lower priority number should mean higher priority; document
+this rule clearly. - If two events have the same priority, use a
+deterministic secondary sort, such as start time or most recently
+updated. - Only show events that are published and active. - A LIVE
+event should show a clear red LIVE badge. - An UPCOMING event should
+show its scheduled date and time. - An ENDED or CANCELLED event should
+not be presented as currently live. - Do not automatically claim that an
+event is live merely because its scheduled start time has passed. Use an
+explicit admin status or a clearly documented scheduling rule. - If no
+eligible featured event exists, gracefully show a default channel
+discovery section. - If the event image is missing, use a neutral
+designed fallback rather than a random unrelated image. - The featured
+button must open the correct event or channel player.
+
+3.3 Multiple featured events - Support more than one featured event. -
+Allow the administrator to assign priority values. - Optionally support
+a small carousel only when multiple featured events genuinely need it. -
+Do not autoplay a carousel aggressively. - Provide clear manual
+navigation and accessible controls. - On mobile, keep the primary
+featured event readable and actionable.
+
+3.4 Popular channels Display a responsive grid or horizontal row of
+popular channels. Each channel item may show: - Channel logo. - Channel
+name. - Category. - Country or language, where useful. - LIVE or
+availability status only when verified. - Favorite control.
+
+Clicking a channel opens its player page or player view.
+
+3.5 Continue watching / recently watched - Store recently watched
+channel IDs locally. - Display a compact recently watched section when
+history exists. - Allow users to clear their local history. - Do not
+store sensitive viewing information on a server. - If there is no
+history, hide the section rather than showing fake entries.
+
+3.6 Sports and special events Create a section for sports and special
+events: - Cricket. - Football. - Other sports. - Tournaments. - Special
+broadcasts.
+
+Show live and upcoming events based on published backend data. Allow
+administrators to prioritize a match or tournament. Do not display
+fabricated scores, fixtures, or match statuses.
+
+3.7 Browse by category Support categories such as: - Nepali TV. -
+Sports. - News. - Entertainment. - Movies. - Music. - International. -
+Regional TV. - Kids and family, only where appropriate and licensed.
+
+Only show categories that contain active, published channels. The
+administrator must be able to create, edit, reorder, and disable
+categories.
+
+3.8 Announcements Allow the administrator to publish a small
+announcement banner. Examples: - A special event is starting soon. - A
+channel has moved to a new stream. - Temporary maintenance notice.
+
+Announcements must be dismissible where appropriate and must not
+dominate the homepage.
+
+===================================================================== 4.
+LIVE TV PLAYER
+=====================================================================
+
+Build a stable, responsive video player using established open-source
+technologies.
+
+Preferred: - hls.js for HLS playback in browsers that do not support HLS
+natively. - Native HTML5 video where supported. - Video.js may be used
+if it provides a clear benefit, but avoid unnecessary overlapping player
+libraries. - Add MPEG-DASH support only if a compatible playback library
+is implemented and tested.
+
+Player requirements: - HLS .m3u8 support. - MPEG-DASH .mpd support if
+implemented. - Automatic quality selection when the stream provides
+multiple renditions. - Manual quality selection when available. -
+Fullscreen. - Volume control. - Mute/unmute. - Play/pause where
+supported by the stream. - Loading indicator. - Buffering indicator. -
+Playback error handling. - Reconnection with sensible retry limits. -
+Responsive player sizing. - Picture-in-picture where supported by the
+browser. - Optional playback speed only where the stream and player
+support it. - Channel switching without unnecessarily reloading the
+whole application. - Clear channel title and logo near the player. - A
+useful offline/unavailable message. - A retry button. - A way to return
+to channels.
+
+Streaming details: - Detect whether the browser supports the stream
+format. - Handle CORS errors, network errors, manifest errors, and
+unsupported formats with understandable messages. - Do not retry
+endlessly. - Use exponential backoff or a sensible capped retry
+policy. - Clean up player instances and event listeners when switching
+channels or leaving a page. - Do not create multiple simultaneous player
+instances. - Do not autoplay with sound. Respect browser autoplay
+restrictions. - Do not promise that a stream is working until playback
+has actually been tested. - Do not falsely show a LIVE status based only
+on a URL existing in the database.
+
+Quality selection: - Show only quality levels actually exposed by the
+stream. - If the stream provides adaptive HLS renditions, support Auto
+and the available quality options. - Do not claim that JavaScript can
+magically create higher-quality source video from a low-quality
+stream. - Do not claim that the application can reduce the broadcaster’s
+bandwidth or transcode a stream unless a real server-side transcoding
+service exists. - Explain unavailable quality controls gracefully.
+
+Player page layout: - Main video player. - Channel name and logo. - LIVE
+or stream status where verified. - Favorite button. - Share button. -
+Related channels or next channels. - Optional event details. - On
+mobile, keep the player prominent and controls accessible.
+
+===================================================================== 5.
+OPEN-SOURCE CHANNEL DATA AND IPTV REPOSITORIES
+=====================================================================
+
+Use publicly available IPTV repositories as optional sources for channel
+metadata and stream discovery.
+
+Repositories to evaluate: - https://github.com/iptv-org/iptv -
+https://github.com/iptv-org/database -
+https://github.com/iptv-org/iptv-org.github.io
+
+Use their current documented formats, data files, APIs, and licensing
+terms. Verify the current repository structure before integrating it; do
+not assume a file path or API endpoint will remain unchanged.
+
+Requirements: - Import channel metadata where permitted. - Organize
+channels by country, category, and language. - Display channel name,
+logo, country, language, and category when metadata exists. - Allow
+administrators to approve or reject imported channels. - Allow
+administrators to add custom channels. - Allow administrators to edit
+channel metadata. - Allow administrators to disable unavailable
+channels. - Allow administrators to remove entries. - Validate stream
+URLs before publishing. - Clearly distinguish imported data from
+manually verified channels. - Do not assume every listed stream is
+operational. - Do not copy or redistribute streams unless the source
+license and broadcaster permissions allow it. - Respect repository
+licenses, broadcaster copyright, territorial restrictions, and terms of
+use. - Do not bypass DRM, authentication, paywalls, geo-restrictions, or
+other access controls. - Do not use pirated or unauthorized streams. -
+Do not scrape websites in violation of their terms.
+
+Important architecture rule: Do not hardcode a huge channel list in the
+frontend. Channel data must come from the backend or a controlled
+data-import process.
+
+Create an import workflow: 1. Administrator starts an import. 2. Backend
+or trusted import process retrieves permitted metadata. 3. Imported
+records are stored as pending/unpublished. 4. Administrator reviews
+channel details and stream source. 5. Administrator tests or verifies
+the stream. 6. Administrator approves and publishes the channel. 7.
+Public website displays only active, published channels.
+
+If an external repository becomes unavailable, the application should
+continue using its already stored approved channel records.
+
+===================================================================== 6.
+BACKEND ARCHITECTURE — FIREBASE PREFERRED
+=====================================================================
+
+Preferred backend: - Firebase Firestore for application data. - Firebase
+Authentication for administrator authentication only. - Firebase Storage
+for logos and banners. - Firebase Security Rules for access control. -
+Optional Cloud Functions for trusted server-side tasks.
+
+The public frontend must not require viewer authentication.
+
+6.1 Public read access Allow unauthenticated visitors to read only
+published public data: - Active published channels. - Active published
+categories. - Published featured events. - Public announcements. -
+Public application settings that are safe to expose.
+
+Do not expose: - Admin account details. - Private configuration. -
+Secret keys. - Internal moderation notes. - Draft or unpublished
+content. - Private operational data. - Service account credentials.
+
+6.2 Admin write access Only authenticated and authorized administrators
+may: - Create, edit, publish, unpublish, or delete channels. - Change
+stream URLs. - Create and manage events. - Change priority values. -
+Upload or delete approved media. - Manage categories. - Edit public
+announcements. - Change public settings. - Enable maintenance mode.
+
+Use role-based authorization. Prefer custom claims or a trusted
+admin-role collection whose permissions cannot be granted by an ordinary
+user.
+
+6.3 Firebase Security Rules Create and include complete Firestore and
+Storage Security Rules.
+
+Rules must: - Permit unauthenticated read access only to explicitly
+public published records. - Deny unauthenticated writes. - Deny all
+writes from non-admin authenticated users. - Protect unpublished and
+draft records. - Validate allowed fields and data types where
+practical. - Prevent users from assigning themselves admin privileges. -
+Protect uploaded media from unauthorized writes and deletions. - Default
+to deny when no rule explicitly allows an operation.
+
+Do not use permissive development rules such as allow read, write: if
+true in the final application.
+
+6.4 Firebase credentials and secrets - Frontend Firebase configuration
+values may be public identifiers, but they are not authorization. -
+Never expose Firebase Admin SDK credentials, service account JSON,
+private API secrets, or privileged tokens in frontend code. - Use
+environment variables for deployment configuration. - Use trusted
+server-side functions for privileged operations. - Include a
+.env.example file with placeholder values only.
+
+===================================================================== 7.
+OPTIONAL ALTERNATIVE — GOOGLE SHEETS + APPS SCRIPT
+=====================================================================
+
+Provide a Google Sheets integration as an optional lightweight
+alternative, not as an insecure direct-write database.
+
+Use Google Sheets for manageable content such as: - Channels. - Featured
+events. - Categories. - Announcements. - Public application settings.
+
+Suggested sheet tabs:
+
+CHANNELS: id | name | logo | streamUrl | category | country | language |
+isActive | isPublished | priority | description | updatedAt
+
+FEATURED_EVENTS: id | title | subtitle | description | thumbnail |
+banner | channelId | streamUrl | status | startTime | endTime | priority
+| isActive | isPublished | buttonLabel | updatedAt
+
+CATEGORIES: id | name | slug | icon | isActive | displayOrder
+
+ANNOUNCEMENTS: id | title | message | isActive | startTime | endTime |
+displayOrder
+
+APP_SETTINGS: key | value | updatedAt
+
+Google Sheets security: - The public website may retrieve only the
+published public data. - Do not expose a write-capable Apps Script
+endpoint without authentication. - All write operations must go through
+a trusted Apps Script or server-side endpoint with verified
+administrator authorization. - Do not put a private admin password or
+secret token in browser JavaScript. - Validate incoming data and
+restrict allowed operations. - Protect the spreadsheet and script
+deployment permissions. - Document the security limitations and
+deployment setup.
+
+If Firebase is selected, implement Firebase as the primary backend. Do
+not create two competing sources of truth. Google Sheets should be an
+optional alternative or controlled import/export source.
+
+===================================================================== 8.
+ADMIN DASHBOARD
+=====================================================================
+
+Create a separate, polished admin interface at /admin.
+
+8.1 Admin login - Route: /admin/login. - Firebase Authentication. - No
+public admin registration. - Clear invalid-login and network-error
+messages. - Secure session handling. - Logout. - Redirect
+unauthenticated users to the admin login page. - Check administrator
+authorization before loading management data. - Do not store passwords
+in localStorage. - Do not hardcode a password in frontend code.
+
+8.2 Admin overview Show useful operational information: - Total active
+published channels. - Total inactive channels. - Total published
+events. - Upcoming events. - Current featured event. - Recently updated
+channels. - Recent administrative changes if an audit log is
+implemented.
+
+Do not invent analytics or display fake numbers. If data is missing,
+show an honest empty state.
+
+8.3 Channel management Administrator can: - Add a channel. - Edit a
+channel. - Delete or archive a channel. - Enable or disable a channel. -
+Publish or unpublish a channel. - Set channel name. - Set logo URL or
+upload logo. - Set stream URL. - Set category. - Set country. - Set
+language. - Set description. - Set priority. - Mark as featured. - Test
+the stream. - View last verification result and time, if implemented.
+
+Stream test behaviour: - Perform a real, limited availability/playback
+check where technically possible. - Explain that a simple HTTP response
+does not guarantee browser playback. - Do not mark a stream as working
+merely because a URL is syntactically valid. - Display CORS or format
+limitations clearly. - Do not run endless tests.
+
+8.4 Featured event management Administrator can: - Create an event. -
+Edit event details. - Upload banner and thumbnail. - Select an existing
+channel. - Optionally provide an event-specific stream URL override. -
+Set date and time. - Set status. - Set priority. - Publish/unpublish. -
+Activate/deactivate. - Preview the homepage appearance. - Delete or
+archive an event.
+
+Priority controls: - Use a simple numeric priority field or
+drag-and-drop sorting. - Clearly explain that smaller numbers mean
+higher priority if that rule is chosen. - Save changes to the backend. -
+Reflect the new order on the public homepage automatically.
+
+8.5 Category management - Add category. - Edit category. - Reorder
+categories. - Enable/disable category. - Assign channels to
+categories. - Hide empty categories from public navigation.
+
+8.6 Announcement management - Create announcement. - Edit message. - Set
+active/inactive. - Set optional start and end time. - Preview public
+display.
+
+8.7 Homepage settings Allow administrators to configure: - Featured
+event visibility. - Homepage announcement. - Popular channel
+selection. - Category order. - Brand logo and name, where appropriate. -
+Maintenance mode. - Optional theme defaults.
+
+8.8 Media management - Upload event banners. - Upload event
+thumbnails. - Upload channel logos. - Validate file types and file
+sizes. - Use Firebase Storage or another properly configured media
+store. - Display upload progress. - Handle upload failures. - Avoid
+storing large image files directly in Firestore documents.
+
+8.9 Maintenance mode - Allow administrators to enable or disable
+maintenance mode. - When enabled, show a simple public maintenance page
+or notice. - Preserve access to the admin login and dashboard for
+authorized administrators. - Do not accidentally lock administrators
+out.
+
+===================================================================== 9.
+DATA MODEL
+=====================================================================
+
+Use clear, documented data structures. Suggested Firestore collections:
+
+channels/{channelId} Fields: - name: string - logoUrl: string -
+streamUrl: string - streamType: string, such as hls or dash -
+categoryId: string - country: string - language: string - description:
+string - isActive: boolean - isPublished: boolean - isFeatured:
+boolean - priority: number - sourceType: string, such as manual or
+imported - verificationStatus: string - lastVerifiedAt: timestamp or
+null - createdAt: timestamp - updatedAt: timestamp
+
+events/{eventId} Fields: - title: string - subtitle: string -
+description: string - thumbnailUrl: string - bannerUrl: string -
+channelId: string - streamUrlOverride: string or null - status:
+UPCOMING, LIVE, ENDED, or CANCELLED - startTime: timestamp - endTime:
+timestamp or null - priority: number - isActive: boolean - isPublished:
+boolean - buttonLabel: string - createdAt: timestamp - updatedAt:
+timestamp
+
+categories/{categoryId} Fields: - name: string - slug: string - icon:
+string or null - isActive: boolean - displayOrder: number - createdAt:
+timestamp - updatedAt: timestamp
+
+announcements/{announcementId} Fields: - title: string - message:
+string - isActive: boolean - isPublished: boolean - startTime: timestamp
+or null - endTime: timestamp or null - displayOrder: number - createdAt:
+timestamp - updatedAt: timestamp
+
+settings/public Fields: - appName: string - tagline: string - logoUrl:
+string - maintenanceMode: boolean - showFeaturedEvent: boolean -
+defaultTheme: string - updatedAt: timestamp
+
+admin audit log, if implemented: - actorId - action - entityType -
+entityId - timestamp - safe summary of the change
+
+Never store passwords or private credentials in these content
+collections.
+
+Data rules: - Use server timestamps where appropriate. - Validate
+required fields. - Use stable document IDs. - Handle missing optional
+fields. - Avoid duplicating the same source of truth. - Define indexes
+required for common queries. - Document all collection structures.
+
+=====================================================================
+10. SEARCH AND DISCOVERY
+=====================================================================
+
+Provide simple, fast search.
+
+Users can search by: - Channel name. - Category. - Country. -
+Language. - Event title.
+
+Requirements: - Search should work without login. - Provide category
+filters. - Provide clear empty states. - Support keyboard interaction. -
+Debounce search input where appropriate. - Avoid expensive database
+queries on every keystroke. - Cache public channel metadata sensibly. -
+Do not claim to provide full-text search if only basic client-side
+filtering is implemented.
+
+=====================================================================
+11. PUBLIC VIEWER FEATURES
+=====================================================================
+
+Implement: - Favorite channels stored locally. - Recently watched
+channels stored locally. - Clear recent history. - Share channel link. -
+Share event link. - Copy stream-independent public page URL, not private
+backend URLs. - Optional dark/light theme preference stored locally. -
+Responsive browsing. - Direct links to channels and events. - Useful
+not-found page. - Useful offline/error states.
+
+No viewer account is required for any of these features.
+
+Do not add: - Viewer login. - Viewer registration. - Subscription
+payments. - User profile management. - Email or phone verification. -
+Mandatory account creation. - Artificial social features that are not
+necessary.
+
+=====================================================================
+12. ROUTES AND APPLICATION STRUCTURE
+=====================================================================
+
+Suggested public routes: - / - /live - /sports - /news -
+/entertainment - /category/:slug - /channel/:channelId -
+/event/:eventId - /search - /about - /privacy - /terms
+
+Suggested admin routes: - /admin/login - /admin/dashboard -
+/admin/channels - /admin/channels/new -
+/admin/channels/:channelId/edit - /admin/events - /admin/events/new -
+/admin/events/:eventId/edit - /admin/categories - /admin/announcements -
+/admin/settings
+
+Protect all admin routes and backend writes. Public routes must remain
+accessible without authentication.
+
+Suggested source organization:
+
+src/ app/ router/ providers/ components/ layout/ navigation/ cards/
+player/ status/ forms/ pages/ public/ admin/ features/ channels/ events/
+categories/ search/ favorites/ announcements/ services/ firebase/
+streaming/ channel-import/ hooks/ types/ utils/ styles/
+
+Keep components reusable and code maintainable. Separate public data
+access from privileged admin operations.
+
+=====================================================================
+13. RECOMMENDED TECHNOLOGY STACK
+=====================================================================
+
+Frontend: - React. - Vite. - TypeScript. - Tailwind CSS. - React
+Router. - Lucide icons. - hls.js. - Optional Video.js only if justified.
+
+Backend: - Firebase Firestore. - Firebase Authentication for
+administrators only. - Firebase Storage. - Firebase Security Rules. -
+Optional Cloud Functions for trusted server-side operations.
+
+Alternative backend: - Google Sheets + Google Apps Script with secure
+server-side authorization.
+
+Hosting: - Vercel, Netlify, or Firebase Hosting.
+
+Development requirements: - Use current stable compatible package
+versions. - Avoid unnecessary dependencies. - Use environment
+variables. - Include a complete README. - Include .env.example. -
+Include database setup instructions. - Include deployment
+instructions. - Include Firebase Security Rules. - Include any required
+Firestore indexes. - Provide meaningful error handling. - Do not put
+secrets in source control.
+
+=====================================================================
+14. PERFORMANCE, RELIABILITY, AND COMPATIBILITY
+=====================================================================
+
+-   Mobile-first responsive design.
+-   Lazy-load logos and thumbnails.
+-   Use image dimensions or aspect ratios to reduce layout shifts.
+-   Cache public channel metadata sensibly.
+-   Avoid excessive Firestore reads.
+-   Use real-time listeners only where they add value, such as featured
+    events or admin updates.
+-   Clean up listeners when components unmount.
+-   Use pagination or sensible limits for large channel collections.
+-   Use retry limits for failed streams.
+-   Handle offline network conditions.
+-   Display useful loading skeletons.
+-   Provide meaningful empty states.
+-   Avoid unnecessary animation.
+-   Optimize bundle size.
+-   Test on Android Chrome and desktop browsers.
+-   Ensure the application remains usable if optional localStorage
+    features fail.
+-   Do not let a broken stream crash the whole application.
+
+=====================================================================
+15. STREAM VALIDATION AND LEGAL RESPONSIBILITY
+=====================================================================
+
+The platform must use streams that the operator is authorized to
+display.
+
+-   Use publicly accessible streams only when their publication and
+    redistribution are permitted.
+-   Respect broadcaster copyright, repository licenses, territorial
+    restrictions, and terms of service.
+-   Do not bypass DRM, login walls, paywalls, geo-blocking, or access
+    controls.
+-   Do not represent unauthorized streams as official.
+-   Keep source attribution or licensing notes where required.
+-   Provide an admin-controlled way to remove a stream following a
+    rights complaint.
+-   Do not fabricate channel logos, broadcaster names, schedules, match
+    information, or stream availability.
+
+Technical caveats: - A browser may be unable to play a stream because of
+CORS, codec, DRM, network, or browser restrictions. - A URL returning a
+successful HTTP response does not guarantee that browser playback will
+work. - Some HLS sources may not expose multiple quality levels. - The
+website cannot create genuine higher-quality video from a low-quality
+source. - Client-side JavaScript cannot guarantee bandwidth reduction or
+server-side transcoding. - Do not proxy streams through an unapproved
+service or expose private source credentials.
+
+=====================================================================
+16. TESTING AND ACCEPTANCE CRITERIA
+=====================================================================
+
+The application is not complete until these scenarios work:
+
+PUBLIC VIEWER TESTS: 1. Open the homepage in a private/incognito browser
+session. 2. Confirm that no login or registration is required. 3. Browse
+published channels. 4. Search for a channel. 5. Open a channel player.
+6. Play a valid test stream. 7. Switch channels. 8. Save and remove a
+favorite. 9. Confirm recently watched channels work locally. 10. Open a
+direct channel URL. 11. Open the website on a mobile screen. 12. Confirm
+disabled or unpublished channels are not publicly visible.
+
+FEATURED EVENT TESTS: 1. Log in as an authorized administrator. 2.
+Create a featured event. 3. Add a title, banner, date, status, and
+channel. 4. Set priority to 1. 5. Publish the event. 6. Open the public
+homepage in another browser session. 7. Confirm the event appears at the
+top. 8. Change its priority or banner. 9. Confirm the public page
+reflects the updated data without a frontend rebuild. 10. Disable or
+unpublish the event and confirm it disappears from public listings.
+
+ADMIN SECURITY TESTS: 1. Open /admin in a logged-out session. 2. Confirm
+redirect to /admin/login. 3. Attempt a public Firestore write. 4.
+Confirm that it is denied. 5. Attempt a write as a non-admin
+authenticated account, if such an account exists. 6. Confirm that it is
+denied. 7. Confirm that an authorized admin can manage content. 8.
+Confirm that no admin registration is publicly available. 9. Confirm
+that privileged credentials are not exposed in frontend assets. 10.
+Confirm that maintenance mode does not lock out administrators.
+
+PLAYER TESTS: 1. Test a known valid HLS stream that is authorized for
+testing. 2. Test an invalid stream URL. 3. Test an offline stream. 4.
+Test a stream with CORS restrictions. 5. Confirm clear error messages.
+6. Confirm retry limits. 7. Confirm player cleanup when switching
+channels. 8. Confirm quality selection only when multiple levels are
+actually available.
+
+Do not mark acceptance criteria as passed unless they have actually been
+tested.
+
+=====================================================================
+17. REQUIRED DELIVERABLES
+=====================================================================
+
+Deliver the complete working project with:
+
+1.  Responsive public website.
+2.  Homepage with dynamic priority featured event.
+3.  Live TV channel directory.
+4.  Functional video player.
+5.  Channel categories.
+6.  Search and filters.
+7.  Favorites using localStorage.
+8.  Recently watched using localStorage.
+9.  Event pages and direct channel links.
+10. Secure admin login.
+11. Admin dashboard.
+12. Channel management.
+13. Featured event management and priority controls.
+14. Category management.
+15. Announcement management.
+16. Homepage settings.
+17. Firebase integration.
+18. Firestore Security Rules.
+19. Firebase Storage Security Rules.
+20. Firestore indexes, if required.
+21. Example environment file.
+22. Sample data clearly marked as demonstration data.
+23. Optional Google Sheets integration guide.
+24. Optional IPTV repository import guide.
+25. Setup and deployment README.
+26. Clear troubleshooting instructions.
+
+Do not provide only screenshots, static HTML, or nonfunctional buttons.
+Every visible control must either work or be clearly marked as
+unavailable/not implemented.
+
+=====================================================================
+18. DEVELOPMENT WORKFLOW
+=====================================================================
+
+Build the project in sensible stages:
+
+STAGE 1 — Foundation - Set up React, Vite, TypeScript, and Tailwind. -
+Establish the visual system. - Build responsive navigation and page
+layout. - Create public routes.
+
+STAGE 2 — Public experience - Build homepage. - Build channel cards and
+categories. - Build search. - Build channel and event pages. - Implement
+local favorites and recently watched.
+
+STAGE 3 — Streaming player - Integrate hls.js. - Implement player
+controls. - Add quality selection where supported. - Add error handling
+and retry limits. - Test with authorized sample streams.
+
+STAGE 4 — Backend - Configure Firebase. - Create collections and data
+types. - Connect public read operations. - Implement caching and loading
+states. - Add Firebase Security Rules.
+
+STAGE 5 — Admin - Implement admin-only authentication. - Protect admin
+routes and backend writes. - Build channel management. - Build featured
+event management. - Build priority ordering. - Build category,
+announcement, and settings management. - Add media uploads.
+
+STAGE 6 — Verification - Test public access without login. - Test
+administrator access. - Test security rules. - Test featured event
+updates. - Test channel playback. - Test mobile and desktop layouts. -
+Fix errors and document limitations.
+
+Do not skip security or playback testing to make the interface appear
+complete.
+
+=====================================================================
+19. FINAL DESIGN AND PRODUCT RULES
+=====================================================================
+
+The final application must follow these non-negotiable rules:
+
+1.  The application name is exactly: तपाईंको TV.
+2.  Public viewers never need to log in.
+3.  Only authorized administrators need to log in.
+4.  No public user registration or subscription system.
+5.  The featured event is controlled dynamically by the admin.
+6.  The highest-priority eligible event appears first.
+7.  Channels are managed through the backend, not hardcoded into the
+    frontend.
+8.  The player must handle errors honestly.
+9.  Use open-source technologies and properly permitted channel sources.
+10. Never expose privileged credentials.
+11. Do not fabricate streams, channels, schedules, or statistics.
+12. Keep the interface minimalist, polished, fast, and mobile-friendly.
+13. Do not add unnecessary AI-generated design patterns or decorative
+    clutter.
+14. Build working functionality rather than a static mockup.
+15. Document anything that requires external credentials or manual
+    setup.
+
+FINAL PRODUCT VISION
+
+तपाईंको TV should feel like opening a television, not opening a
+complicated website.
+
+A visitor opens the homepage and immediately sees the most important
+live event. They tap Watch Live, choose a channel, and start watching.
+No registration, no account, no unnecessary steps.
+
+The administrator opens /admin/login, signs in securely, updates the
+featured match, changes a channel stream, uploads a banner, or publishes
+an announcement. The public website reflects those changes automatically
+without requiring a code edit or redeployment.
+
+Keep the viewer experience effortless and the administrator experience
+powerful.
+
+Build a beautiful, reliable, maintainable, and genuinely usable
+streaming platform.
