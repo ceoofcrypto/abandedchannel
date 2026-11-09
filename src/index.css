@@ -6,6 +6,18 @@
     --font-mono: 'JetBrains Mono', monospace;
   }
 
+  html, body {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  /* Allow input selection for search and text typing */
+  input, textarea {
+    -webkit-user-select: text;
+    user-select: text;
+  }
+
   body {
     font-family: var(--font-sans);
     background-color: #0b0d11;

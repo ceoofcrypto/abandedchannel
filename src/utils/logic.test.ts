@@ -10,6 +10,7 @@ import {
 } from './channels.ts';
 import { FeaturedEvent, Channel, Country } from '../types/index.ts';
 import { groupCountriesAlphabetically, searchCountries } from './countryHelpers.ts';
+import { isDebuggerShortcut } from './security.ts';
 
 test('detectStreamType identifies HLS, DASH, and direct formats', () => {
   assert.equal(detectStreamType('https://live.example.com/playlist.m3u8'), 'hls');
@@ -264,3 +265,26 @@ test('getChannelMonogram generates deterministic callsign initials', () => {
   const mono2 = getChannelMonogram('NDTV');
   assert.equal(mono2.initials, 'ND');
 });
+
+test('isDebuggerShortcut detects developer tools and inspection shortcuts', () => {
+  // F12
+  assert.equal(isDebuggerShortcut({ key: 'F12', keyCode: 123 }), true);
+  // Ctrl+Shift+I / Cmd+Shift+I
+  assert.equal(isDebuggerShortcut({ key: 'I', ctrlKey: true, shiftKey: true }), true);
+  assert.equal(isDebuggerShortcut({ key: 'i', metaKey: true, shiftKey: true }), true);
+  // Ctrl+Shift+J / C / K
+  assert.equal(isDebuggerShortcut({ key: 'J', ctrlKey: true, shiftKey: true }), true);
+  assert.equal(isDebuggerShortcut({ key: 'C', ctrlKey: true, shiftKey: true }), true);
+  assert.equal(isDebuggerShortcut({ key: 'k', ctrlKey: true, shiftKey: true }), true);
+  // Ctrl+U (view source)
+  assert.equal(isDebuggerShortcut({ key: 'u', ctrlKey: true }), true);
+  assert.equal(isDebuggerShortcut({ key: 'U', metaKey: true }), true);
+  // Ctrl+S (save source)
+  assert.equal(isDebuggerShortcut({ key: 's', ctrlKey: true }), true);
+  // Normal typing should not be blocked
+  assert.equal(isDebuggerShortcut({ key: 'Enter' }), false);
+  assert.equal(isDebuggerShortcut({ key: 'a' }), false);
+  assert.equal(isDebuggerShortcut({ key: 'c', ctrlKey: true }), false); // Ctrl+C copy
+  assert.equal(isDebuggerShortcut({ key: 'v', ctrlKey: true }), false); // Ctrl+V paste
+});
+
