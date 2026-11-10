@@ -44,8 +44,6 @@ The hero section at the top of the homepage is dynamically controlled by adminis
 ## 4. Default Demonstration Credentials
 
 For testing the Administrator Control Room:
-- **Email**: `admin@tapaiko.tv`
-- **Password**: `AdminTapaiko2026!`
 
 To change or secure these credentials in production, configure environment variables or connect Firebase Authentication.
 
